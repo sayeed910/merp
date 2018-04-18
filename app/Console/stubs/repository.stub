@@ -1,0 +1,15 @@
+<?php
+
+namespace DummyNamespace;
+
+
+interface DummyClass
+{
+    public function findById($id);
+
+    public function save(DummyEntity $dummyVar);
+
+    public function update(DummyEntity $dummyVar);
+
+    public function delete(DummyEntity $dummyVar);
+}

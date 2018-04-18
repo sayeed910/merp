@@ -1,0 +1,38 @@
+#!/bin/bash
+
+./composer install
+
+printf "Enter Database name: "
+read DBNAME
+
+printf "Enter Database username: "
+read USERNAME
+
+printf "Enter Database password: "
+read -s PASSWORD
+
+echo ""
+
+awk -F\= -v db="$DBNAME" -v user="$USERNAME" -v pass="$PASSWORD" '
+{OFS=FS}
+/DB_DATABASE/ {$2=db}
+/DB_USERNAME/ {$2=user}
+/DB_PASSWORD/ {$2=pass}
+{print}
+' .env.example > .env
+
+echo -n "Should I fill database with dummy data? [y/n]: "
+read SHOULDFILL
+
+
+
+php artisan key:generate
+
+
+if [ "$SHOULDFILL" = "y" ] || [ "$SHOULDFILL" = "Y" ]; then
+	php artisan migrate --seed
+else
+	php artisan migrate
+fi
+
+./vendor/bin/phpunit

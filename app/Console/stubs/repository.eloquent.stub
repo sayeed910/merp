@@ -1,0 +1,36 @@
+<?php
+
+
+namespace DummyNamespace;
+
+
+use App\Domain\DummyEntity;
+use App\Domain\DummyEntityRepository;
+
+class DummyClass implements DummyEntityRepository
+{
+
+    public function findById($id)
+    {
+        // TODO: Implement findById() method.
+    }
+
+    public function save(DummyEntity $dummyVar)
+    {
+        // TODO: Implement save() method.
+    }
+
+    public function update(DummyEntity $dummyVar)
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete(DummyEntity $dummyVar)
+    {
+        // TODO: Implement delete() method.
+    }
+
+
+}
+
+
