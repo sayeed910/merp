@@ -12,7 +12,6 @@ class EntityFactory
     private $productRepository = null;
 
 
-
     public function employee($name, $designation, $salary, $contactNo)
     {
 
@@ -21,6 +20,7 @@ class EntityFactory
 
         return new Employee($this->employeeRepository, $name, $designation, $salary, $contactNo);
     }
+
 
     public function productBuilder()
     {
@@ -43,7 +43,24 @@ class EntityFactory
         if ($id) $category->setId($id);
         return $category;
     }
+    public function customer($name, $id = null,$due,$purchases)
+    {
 
+        $customer = new Customer($name);
+        if ($id) $customer->setId($id);
+        if ($due) $customer->setDue($due);
+        if ($purchases) $customer->setPurchases($purchases);
+        return $customer;
+    }
+    public function supplier($name, $id = null,$due,$sales)
+    {
+
+        $supplier = new Supplier($name);
+        if ($id) $supplier->setId($id);
+        if ($due) $supplier->setDue($due);
+        if ($sales) $supplier->setPurchases($sales);
+        return $supplier;
+    }
     public function purchaseOrder($supplier, $user)
     {
         return new PurchaseOrder($supplier, $user);
