@@ -2909,7 +2909,7 @@ html[dir=rtl] .previewManageButton {
 
 #top-section .item.itemImage1 {
     /* background-image: url('//cdn-cms.f-static.com/uploads/907877/800_5a784365ee578.jpg'); */
-    background-image: url('../image/img1.jpg');
+    background-image: url('https://images.unsplash.com/photo-1418489098061-ce87b5dc3aee?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2f033882f3c25404e3f904fbfe2351be&w=1000&q=80');
     background-size: 100% 180%;
     height: 100%;
 }
@@ -2938,15 +2938,15 @@ html[dir=rtl] .previewManageButton {
 
 @media(min-width:768px) {
     #top-section .item.itemImage1 {
-        background-image: url('../image/img1.jpg');
+        background-image: url('https://images.unsplash.com/photo-1418489098061-ce87b5dc3aee?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2f033882f3c25404e3f904fbfe2351be&w=1000&q=80');
         background-size: 100% 180%;
     }
     #top-section .item.itemImage2 {
-        background-image: url('../image/img2.jpg');
+        background-image: url('');
         background-size: 100% 100%;
     }
     #top-section .item.itemImage3 {
-        background-image: url('../image/img3.jpg');
+        background-image: url('');
         background-size: 100% 100%;
     }
     #top-section .item.itemImage4 {
