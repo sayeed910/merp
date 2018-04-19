@@ -66,7 +66,7 @@
                 <tr>
                     <th>SN</th>
                     <th>Name</th>
-                    <th>No. of Items</th>
+                    <th>Due</th>
                     <th></th>
                 </tr>
 
@@ -76,7 +76,7 @@
                     <tr id="{{$Supplier->id}}">
                         <td></td>
                         <td>{{$Supplier->name}}</td>
-                        <td>{{$Supplier->products->count()}}</td>
+                        <td>{{$Supplier->due()}}</td>
                         <td>
                             <button title="Edit" data-toggle="modal" data-target="#editSupplierModal"
                                     class="btn btn-primary edit"><i class="fa fa-edit"></i></button>

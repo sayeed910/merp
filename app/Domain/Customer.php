@@ -25,10 +25,10 @@ class Customer
     private $purchases;
 
     /**
-     * Brand constructor.
+     * Customer constructor.
      * @param $name
      */
-    public function __construct($name,$due,$purchases)
+    public function __construct($name,$due = 0,$purchases = [])
     {
         $this->setName($name);
         $this->setDue($due);

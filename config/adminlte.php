@@ -136,14 +136,30 @@ return [
             ]
         ],
         [
-            'text' => 'Sale Order',
-            'url' => 'admin/sale-orders',
-            'icon' => 'money',
-        ], [
-            'text' => 'Customer',
-            'url' => 'admin/customers',
-            'icon' => 'user-circle',
+            'text' => 'Transaction',
+            'submenu' => [
+                [
+                    'text' => 'Sale Order',
+                    'url' => 'admin/sale-orders',
+                    'icon' => 'money',
+                ], [
+                    'text' => 'Customer',
+                    'url' => 'admin/customers',
+                    'icon' => 'user-circle',
+                ],
+                [
+                    'text' => 'Purchase Order',
+                    'url' => 'admin/purchase-orders',
+                    'icon' => 'money',
+                ], [
+                    'text' => 'Supplier',
+                    'url' => 'admin/suppliers',
+                    'icon' => 'user-circle',
+                ],
+
+            ]
         ],
+
         'ACCOUNT SETTINGS',
         [
             'text' => 'Profile',

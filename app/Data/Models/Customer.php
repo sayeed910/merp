@@ -11,8 +11,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
-    protected $fillable = ['name'];
-    public function products(){
-        return $this->hasMany(Product::class);
+    public function saleOrders(){
+        return $this->hasMany(SaleOrder::class);
+    }
+    public function due(){
+        $due = 0;
+        foreach ($this->saleOrders as $saleOrder) {
+            $due += $saleOrder->due;
+        }
+
+        return $due;
     }
 }

@@ -2,39 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Supplier;
-use App\Domain\SupplierRepository;
-use App\Domain\EntityFactory;
-use App\Services\Validation\Validator;
+use App\Data\Models\Supplier;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Validation\ValidationException;
 
 //Todo: change the update & delete method to make Supplier from the repository instead of factory
 class SupplierController extends Controller
 {
-
-    /**
-     * @var SupplierRepository
-     */
-    private $supplierRepository;
-    /**
-     * @var EntityFactory
-     */
-    private $entityFactory;
-    /**
-     * @var Validator
-     */
-    private $validator;
-
-    public function __construct(SupplierRepository $supplierRepository, EntityFactory $entityFactory, Validator $validator)
-    {
-        $this->middleware('auth');
-        $this->supplierRepository = $supplierRepository;
-        $this->entityFactory = $entityFactory;
-        $this->validator = $validator;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -42,8 +15,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = $this->supplierRepository->getAll();
-        return view('suppliers.index', compact('suppliers'));
+        $suppliers = Supplier::all();
+        return view('supplier.index', compact('suppliers'));
     }
 
     /**
@@ -64,14 +37,11 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validateSupplierName($request);
-        $name = $request->input('name');
+        $supplier = new Supplier();
+        $supplier->name = $request->input('name');
+        $supplier->save();
 
-        $supplier = new Supplier($name);
-        $this->supplierRepository->save($supplier);
-
-
-        return redirect('/admin/suppliers');
+        return redirect(url('/admin/suppliers'));
     }
 
     /**
@@ -100,56 +70,32 @@ class SupplierController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param string $id
-     * @return Response
+     * @param Supplier $supplier
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(Request $request, $id)
     {
+        $supplier = Supplier::find($id);
+        $supplier->name = $request->input('name');
+        $supplier->update();
 
-        try {
-            $this->validateSupplierName($request);
-            $name = $request->input('name');
-            $supplier = $this->entityFactory->Supplier($name, $id);
-
-
-            if ($this->supplierRepository->update($supplier))
-                return response()->json(['success' => true]);
-            else
-                return response()->json(['success' => false, 'message' => 'The Supplier does not exist.']);
-        } catch (ValidationException $ex){
-            return response()->json(['success' => false, 'message' => $ex->validator->errors()->first()]);
-        }
-
+        return redirect('/admin/suppliers');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Request $request
-     * @param $id
-     * @return Response
+     * @return string
      */
     public function destroy(Request $request, $id)
     {
-        $supplier = $this->entityFactory->Supplier('dummyname', $id);
-        $wasSuccessful = $this->supplierRepository->delete($supplier);
-        if ($wasSuccessful)
-            return response()->json(['success' => true]);
-        else
-            return response()->json(['success' => false, 'message' => 'Supplier does not exist']);
-    }
+        try {
 
-    /**
-     * @param Request $request
-     */
-    public function validateSupplierName(Request $request)
-    {
-        $this->validator->validate($request, [
-            'name' => 'required|unique:Suppliers|max:100|regex:/^([a-zA-Z0-9]+)$/'
-        ], [
-            'required' => 'The Supplier name can not be empty.',
-            'unique' => 'A Supplier with this name already exists.',
-            'regex' => 'The Supplier name must be one or more alphanumeric characters.'
-        ]);
+            Supplier::find($id)->delete();
+            return 'success';
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

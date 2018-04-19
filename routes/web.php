@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Auth::routes();
@@ -27,9 +27,15 @@ Route::get("/admin/products/{itemCode}/edit", "ProductController@edit");
 Route::patch("/admin/products/{itemCode}", "ProductController@update");
 Route::delete("/admin/products/{itemCode}", "ProductController@destroy");
 
+//Sale order routes
 Route::get('/admin/sale-orders', 'SaleOrderController@index');
 Route::get("/admin/sale-orders/create", "SaleOrderController@create");
 Route::post("/admin/sale-orders", "SaleOrderController@store");
+
+//Sale order routes
+Route::get('/admin/purchase-orders', 'PurchaseOrderController@index');
+Route::get("/admin/purchase-orders/create", "PurchaseOrderController@create");
+Route::post("/admin/purchase-orders", "PurchaseOrderController@store");
 
 Route::get("/admin/brands", "BrandController@index");
 Route::post("/admin/brands", "BrandController@store");
@@ -44,8 +50,14 @@ Route::patch("/admin/categories/{id}", "CategoryController@update");
 
 Route::get("/admin/customers", "CustomerController@index");
 Route::post("/admin/customers", "CustomerController@store");
-Route::post("/admin/customers/delete/", "CustomerController@destroy");
-Route::post("/admin/customers/edit/{customer}", "CustomerController@update");
+Route::delete("/admin/customers/{id}", "CustomerController@destroy");
+Route::patch("/admin/customers/{id}", "CustomerController@update");
+
+//Supplier routes
+Route::get("/admin/suppliers", "SupplierController@index");
+Route::post("/admin/suppliers", "SupplierController@store");
+Route::delete("/admin/suppliers/{id}", "SupplierController@destroy");
+Route::patch("/admin/suppliers/{id}", "SupplierController@update");
 
 
 

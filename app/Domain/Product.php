@@ -59,12 +59,9 @@ class Product
 
     public function purchase($qty)
     {
-        if ($this->stock - $qty < 0) {
-            throw new \RuntimeException("Product not available");
-        } else {
+
             $this->stock += $qty;
             $this->productRepository->update($this);
-        }
     }
 
 
@@ -212,5 +209,10 @@ class Product
         $this->salePrice = $salePrice;
     }
 
+    public function sale($qty)
+    {
+        $this->stock -= $qty;
+        $this->productRepository->save($this);
+    }
 
 }
