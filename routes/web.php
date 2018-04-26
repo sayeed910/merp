@@ -59,7 +59,10 @@ Route::post("/admin/suppliers", "SupplierController@store");
 Route::delete("/admin/suppliers/{id}", "SupplierController@destroy");
 Route::patch("/admin/suppliers/{id}", "SupplierController@update");
 
-
+//reports
+Route::get('/admin/reports', "ReportController@index");
+Route::post('/admin/reports/purchase', "ReportController@purchasesBetween");
+Route::post('/admin/reports/sale', "ReportController@salesBetween");
 
 //EloquentEmployee routes
 Route::get('/admin/employees', 'EmployeeController@index');

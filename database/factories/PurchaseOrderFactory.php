@@ -13,19 +13,18 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-
-$factory->define(\App\Data\Models\SaleOrder::class, function (Faker\Generator $faker) {
+$factory->define(\App\Data\Models\PurchaseOrder::class, function (Faker\Generator $faker) {
 
     $user = \App\Data\Models\User::inRandomOrder()->first();
     if (! $user)
         $user = factory(\App\Data\Models\User::class)->create();
-    $supplier = \App\Data\Models\Customer::inRandomOrder()->first();
+    $supplier = \App\Data\Models\Supplier::inRandomOrder()->first();
     if (! $supplier)
-        $supplier = factory(\App\Data\Models\Customer::class)->create();
+        $supplier = factory(\App\Data\Models\Supplier::class)->create();
 
     return [
         'user_id' => $user->id,
-        'customer_id' => $supplier->id,
+        'supplier_id' => $supplier->id,
         'due' => rand(0, 100)
-   ];
+    ];
 });
