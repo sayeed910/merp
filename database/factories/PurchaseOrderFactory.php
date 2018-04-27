@@ -24,8 +24,9 @@ $factory->define(\App\Data\Models\PurchaseOrder::class, function (Faker\Generato
 
     return [
         'user_id' => $user->id,
+        'ref' => $faker->unique()->bankAccountNumber,
         'supplier_id' => $supplier->id,
         'due' => rand(0, 100),
-        'created_at' => $faker->dateTimeThisDecade
+        'created_at' => $faker->dateTimeThisYear
     ];
 });

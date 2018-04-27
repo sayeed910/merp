@@ -25,7 +25,9 @@ $factory->define(\App\Data\Models\SaleOrder::class, function (Faker\Generator $f
 
     return [
         'user_id' => $user->id,
+        'ref' => $faker->unique()->bankAccountNumber,
         'customer_id' => $supplier->id,
-        'due' => rand(0, 100)
+        'due' => rand(0, 100),
+        'created_at' => $faker->dateTimeThisYear
    ];
 });

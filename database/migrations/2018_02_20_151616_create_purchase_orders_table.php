@@ -15,6 +15,7 @@ class CreatePurchaseOrdersTable extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('ref');
             $table->integer('user_id');
             $table->integer('supplier_id');
             $table->integer('due');
