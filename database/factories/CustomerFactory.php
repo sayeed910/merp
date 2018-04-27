@@ -16,5 +16,8 @@ $factory->define(App\Data\Models\Customer::class, function (Faker\Generator $fak
 
     return [
         'name' => $faker->name,
+        'address' => $faker->sentence,
+        'contact_no' => $faker->phoneNumber,
+        'email' => $faker->email
     ];
 });
