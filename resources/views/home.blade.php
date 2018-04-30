@@ -378,6 +378,9 @@
                         <li class="moduleMenu" data-menu-module-id="5a75af966aac5">
                             <a class="page-scroll" href="#section-5a75af966aac5">Contact</a>
                         </li>
+                        <li class="moduleMenu" >
+                            <a href="{{url("/login")}}">Login</a>
+                        </li>
                     </ul>
                     <ul class="navActions nav navbar-nav">
                         <li class="header-phone-wrapper">
@@ -557,7 +560,7 @@
                             <h4>
                                 <strong>Tahsin Al Sayeed</strong>
                             </h4>
-                            <p>Roll 17<br>4th year, BSc<br>Dept. of CSE<br>University of Dhaka<br>Contact No. +88016121123823</p>
+                            <p>Roll 17<br>4th year, BSc<br>Dept. of CSE<br>University of Dhaka<br>Contact No. +8801612123823</p>
                             <!-- <a href="/sole-distributer/glassco-laboratory-equipments-pvt-ltd?w=907877" class="modules-data-model servcies-more-link btn btn-primary"
                                 data-rel="popupScreen">Learn More</a> -->
                             {{--<button class="btn btn-primary" data-toggle="modal" data-target="#glassco-modal">Learn More</button>--}}
@@ -568,9 +571,9 @@
                                 <span class="fa-stack fa-5x img-circle"
                                       style="background-image:url({{asset('image/profile_pic/shamim.JPG')}});"></span>
                             <h4>
-                                <strong>Kazi Shamim Iqram</strong>
+                                <strong>Kazi Shamim Eakram</strong>
                             </h4>
-                            <p>Roll 45<br>4th year, BSc<br>Dept. of CSE<br>University of Dhaka<br>Contact No. +88016121123823</p>
+                            <p>Roll 45<br>4th year, BSc<br>Dept. of CSE<br>University of Dhaka<br>Contact No. +8801910472802</p>
                             {{--<button class="btn btn-primary" data-toggle="modal" data-target="#korea-modal">Learn More</button>--}}
                         </div>
                     </div>

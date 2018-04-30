@@ -31,7 +31,9 @@ class SaleOrderController extends Controller
      */
     public function index()
     {
+//        echo "here";
         $orders = SaleOrder::all();
+//        var_dump($orders);
 
         return view('saleOrders.index', compact('orders'));
     }
