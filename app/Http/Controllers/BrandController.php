@@ -29,7 +29,7 @@ class BrandController extends Controller
 
     public function __construct(BrandRepository $brandRepository, EntityFactory $entityFactory, Validator $validator)
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
         $this->brandRepository = $brandRepository;
         $this->entityFactory = $entityFactory;
         $this->validator = $validator;

@@ -38,8 +38,18 @@ class ReportController extends Controller
         $date1 = date($request->input('date1'));
         $date2 = date($request->input('date2'));
 
-        return PurchaseOrder::whereRaw('date(created_at) between ? and ?',
+        $orders = PurchaseOrder::whereRaw('date(created_at) between ? and ?',
             [$date1, $date2])->get();
+
+        foreach ($orders as $order){
+            $order->amount = $order->amount();
+            $order->user;
+            $order->supplier;
+//            $order->username = $order->user->name;
+//            $order->suppliername = $order->supplier->name;
+        }
+
+        return $orders;
 
     }
 
@@ -52,7 +62,15 @@ class ReportController extends Controller
         $date1 = date($request->input('date1'));
         $date2 = date($request->input('date2'));
 
-        return SaleOrder::whereRaw('date(created_at) between ? and ?',
+        $orders = SaleOrder::whereRaw('date(created_at) between ? and ?',
             [$date1, $date2])->get();
+
+        foreach ($orders as $order){
+            $order->amount = $order->amount();
+            $order->user;
+            $order->customer;
+        }
+
+        return $orders;
     }
 }

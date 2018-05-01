@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
     public function __construct(CategoryRepository $categoryRepository, EntityFactory $entityFactory)
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
         $this->categoryRepository = $categoryRepository;
         $this->entityFactory = $entityFactory;
     }

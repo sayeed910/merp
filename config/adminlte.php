@@ -30,9 +30,9 @@ return [
     |
     */
 
-    'logo' => '<b>Supertech</b>IMS',
+    'logo' => '<b>M</b>ERP',
 
-    'logo_mini' => '<b>S</b>MS',
+    'logo_mini' => '<b>M</b>P',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +78,8 @@ return [
     | URLs
     |--------------------------------------------------------------------------
     |
-    | Register here your dashboard, logout, login and register URLs. The
+    | Register here your dashboa    </div>
+rd, logout, login and register URLs. The
     | logout URL automatically sends a POST request in Laravel 5.3 or higher.
     | You can set the request to a GET or POST with logout_method.
     | Set register_url to null if you don't want a register link.
@@ -157,7 +158,14 @@ return [
                     'icon' => 'user-circle',
                 ],
 
-            ]
+            ],
+
+        ],
+        [
+            'text' => 'Reports',
+            'url' => 'admin/reports',
+            'active' => ['admin/reports']
+
         ],
 
         'ACCOUNT SETTINGS',
