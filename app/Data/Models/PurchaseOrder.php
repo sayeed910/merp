@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PurchaseOrder extends Model
 {
-    protected $fillable = ['supplier_id', 'due', "user_id"];
+    protected $fillable = ['supplier_id', 'due', "user_id", 'ref'];
     public function purchaseOrderItems()
     {
         return $this->hasMany(PurchaseOrderItem::class);

@@ -9,33 +9,44 @@
     <div class="col-lg-8">
         <div class="box box-primary">
             <div class="box-body">
-                <div class="col-lg-6 form-group">
-                    <select name="product" id="productSelect">
-                        <option></option>
-                        @foreach($products as $product)
-                            <option value="{{$product->item_code}}">{{$product->description()}}</option>
-                        @endforeach
-                    </select>
-                    <button class="btn btn-bitbucket" id="btnProductSelect"><i class="fa fa-plus"></i> Add Item</button>
+
+                <div class="form-container" >
+                    <div class="col-lg-6 form-group">
+                        <select name="product" id="productSelect" class="">
+                            <option></option>
+                            @foreach($products as $product)
+                                <option value="{{$product->item_code}}">{{$product->description()}}</option>
+                            @endforeach
+                        </select>
+                        <button class="btn btn-bitbucket" id="btnProductSelect"><i class="fa fa-plus"></i> Add Item
+                        </button>
+                    </div>
+                    <form class="form-horizontal col-lg-6" style="float: right; margin-right: 0;">
+                        <label for="ref" class="control-label col-sm-2">Ref: </label>
+                        <input type="text" class="col-sm-10" name="ref" id="ref"/>
+                    </form>
+
+                    <br>
+                    <table id="purchaseOrderList" class="table table-responsive">
+                        <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Item Code</th>
+                            <th>Description</th>
+                            <th>Unit</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
                 </div>
-                <table id="purchaseOrderList" class="table table-responsive">
-                    <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Item Code</th>
-                        <th>Description</th>
-                        <th>Unit</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                    </tr>
-
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-
-                </table>
             </div>
         </div>
     </div>
@@ -125,6 +136,9 @@
             $('#supplierSelect').select2({
                 placeholder: "Select Supplier"
             });
+
+
+
             let table = $('#purchaseOrderList').DataTable({
                 columns: [
                     {data: "SN"},
@@ -133,7 +147,13 @@
                     {data: "unit"},
                     {data: "qty"},
                     {data: "price"},
-                    {data: "total"}
+                    {data: "total"},
+                    {
+                        render: function(data, type, full, meta){
+                           return '<button title="Delete" class="btn btn-google delete"><i class="fa fa-trash"></i>\n' +
+                                '</button>'
+                        }
+                    }
                 ],
                 "columnDefs": [{
                     "searchable": false,
@@ -154,13 +174,21 @@
                 });
             }).draw();
 
+            table.on('click', '.delete', function(){
+               table.rows($(this).parents('tr')).remove().draw();
+               calculateAmount();
+            });
+
+
+
             $('#submit').on('click', () => {
                 //TODO: Validation
 
                 let order = {products: []};
                 const data = table.rows().data();
                 for (let i = 0; i < data.length; i++) {
-                    order.products.push({item_code: data[i]['DT_RowId'],
+                    order.products.push({
+                        item_code: data[i]['DT_RowId'],
                         qty: parseInt(data[i]['qty']),
                         price: parseFloat(data[i]['price'])
                     });
@@ -168,16 +196,21 @@
                 order.vat = parseFloat($('#vat').val());
                 order.due = parseFloat($('#due').val());
                 order.supplierId = $('#supplierSelect').val();
+                order.ref = $('#ref').val();
 
                 console.log(order);
-                $.ajax({'url': "{{url("/admin/purchase-orders")}}", 'method': 'POST', data: order}).done(function(response){
-                    $.notify("Purchase Order Created Successfully", {position: 'top center', className:'success'});
-                    setTimeout(function(){
-                        window.location.href="{{url("/admin/purchase-orders")}}";
+                $.ajax({
+                    'url': "{{url("/admin/purchase-orders")}}",
+                    'method': 'POST',
+                    data: order
+                }).done(function (response) {
+                    $.notify("Purchase Order Created Successfully", {position: 'top center', className: 'success'});
+                    setTimeout(function () {
+                        window.location.href = "{{url("/admin/purchase-orders")}}";
                     }, 1000);
                     console.log(response);
-                }).fail(function(){
-                    $.notify("Could not save purchase order", {position: 'top center', className:'error'});
+                }).fail(function () {
+                    $.notify("Could not save purchase order", {position: 'top center', className: 'error'});
                 });
             });
 

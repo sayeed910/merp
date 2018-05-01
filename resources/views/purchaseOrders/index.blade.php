@@ -15,6 +15,7 @@
                 <tr>
                     <th>SN</th>
                     <th>Invoice</th>
+                    <th>Ref</th>
                     <th>User</th>
                     <th>Supplier</th>
                     <th>No. of Items</th>
@@ -29,6 +30,7 @@
                     <tr>
                         <td></td>
                         <td>{{$order->id}}</td>
+                        <td>{{$order->ref}}</td>
                         <td>{{$order->user->name}}</td>
                         <td>{{$order->supplier->name}}</td>
                         <td>{{$order->purchaseOrderItems->count()}}</td>

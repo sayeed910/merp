@@ -60,11 +60,13 @@ class PurchaseOrderController extends Controller
     {
         $supplierId = $request->input('supplierId');
         $due = $request->input('due');
+        $ref = $request->input('ref');
 
         $userId = Auth::user()->id;
         DB::beginTransaction();
         try {
-            $purchaseOrder = new PurchaseOrder(['supplier_id' => $supplierId, 'due' => $due, 'user_id' => $userId]);
+            $purchaseOrder = new PurchaseOrder(['supplier_id' => $supplierId, 'due' => $due,
+                                                'user_id' => $userId, 'ref' => $ref]);
             $purchaseOrder->save();
 
             foreach ($request->input('products') as $product) {

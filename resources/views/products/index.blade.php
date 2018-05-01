@@ -7,58 +7,84 @@
 @section('content')
     <div class="box box-primary">
         <div class="box-body">
-            <a href="{{url('admin/products/create')}}">
-                <button class="btn btn-primary margin-bottom">Add Product</button>
-            </a>
-            <table id="productList" class="table table-responsive">
-                <thead>
-                <tr>
-                    <th>SN</th>
-                    <th>ItemCode</th>
-                    <th>Name</th>
-                    <th>Brand</th>
-                    <th>Category</th>
-                    <th>Size</th>
-                    <th>Unit</th>
-                    <th>Cost</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Damaged</th>
-                    <th></th>
-                </tr>
 
-                </thead>
-                <tbody>
-                @foreach($products as $product)
-                    <tr id="{{$product->item_code}}">
-                        <td></td>
-                        <td>{{$product->item_code}}</td>
-                        <td>{{$product->name}}</td>
-                        <td>{{$product->brand->name}}</td>
-                        <td>{{$product->category->name}}</td>
-                        <td>{{$product->size}}</td>
-                        <td>{{$product->unit}}</td>
-                        <td>{{$product->cost}}</td>
-                        <td>{{$product->price}}</td>
-                        <td>{{$product->stock}}</td>
-                        <td>{{$product->damaged}}</td>
-                        <td>
-                            <button title="Edit" class="btn btn-primary edit"><i class="fa fa-edit"></i></button>
-                            <button title="Delete" class="btn btn-google delete"><i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#listing">Listing</a></li>
+                    <li><a data-toggle="tab" href="#trending">Trending</a></li>
+                </ul>
 
-            </table>
+                <div class="tab-content">
+                    <div id="listing" class="tab-pane fade in active">
+                        <a href="{{url('admin/products/create')}}">
+                            <button class="btn btn-primary margin-bottom">Add Product</button>
+                        </a>
+                        <table id="productList" class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>ItemCode</th>
+                                <th>Name</th>
+                                <th>Brand</th>
+                                <th>Category</th>
+                                <th>Size</th>
+                                <th>Unit</th>
+                                <th>Cost</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Damaged</th>
+                                <th></th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            @foreach($products as $product)
+                                <tr id="{{$product->item_code}}">
+                                    <td></td>
+                                    <td>{{$product->item_code}}</td>
+                                    <td>{{$product->name}}</td>
+                                    <td>{{$product->brand->name}}</td>
+                                    <td>{{$product->category->name}}</td>
+                                    <td>{{$product->size}}</td>
+                                    <td>{{$product->unit}}</td>
+                                    <td>{{$product->cost}}</td>
+                                    <td>{{$product->price}}</td>
+                                    <td>{{$product->stock}}</td>
+                                    <td>{{$product->damaged}}</td>
+                                    <td>
+                                        <button title="Edit" class="btn btn-primary edit"><i class="fa fa-edit"></i></button>
+                                        <button title="Delete" class="btn btn-google delete"><i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div id="trending" class="tab-pane fade">
+                        <label for="type">Type</label>
+                        <select name="type" id="type">
+                            <option value="0">Monthly</option>
+                            <option value="1">Yearly</option>
+                        </select>
+                        <select name="years" id="years"></select>
+                        <select name="months" id="months"></select>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection
 @push('js')
     <script>
         $(document).ready(() => {
-            let table = $('#productList').DataTable({
+            const rangeSelector = $('#type');
+            const yearSelector = $('#years');
+            const monthSelector = $('#months');
+            const table = $('#productList').DataTable({
                 "columnDefs": [{
                     "searchable": false,
                     "orderable": false,
@@ -73,12 +99,12 @@
                 });
             }).draw();
 
-            table.on('click', '.edit', function(){
+            table.on('click', '.edit', function () {
                 const id = $(this).parents('tr').attr('id');
                 window.location.href = "{{url('/admin/products/')}}" + '/' + id + '/edit';
             });
 
-            table.on('click', '.delete', function() {
+            table.on('click', '.delete', function () {
                 const id = $(this).parents('tr').attr('id');
                 const onDone = (status) => {
                     console.log(status);
@@ -108,6 +134,43 @@
                 $.ajax(requestData).done(onDone);
                 console.log(requestData.url);
             });
+
+            const values = [];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+
+            let monthValueString = "";
+            for (let i = 0; i < 11; i++){
+                let selected = "";
+                if (i === new Date().getMonth()){
+                    selected = "selected";
+                }
+                monthValueString += `<option value="${i}" ${selected}>${months[i]}</option>`
+            }
+            values.push(monthValueString);
+
+
+            let yearValueString = "";
+            for (let i = 1995; i < new Date().getFullYear(); i++){
+                yearValueString += `<option value="${i}">${i}</option>`
+            }
+
+            values.push(yearValueString);
+
+            function updateValueSelector() {
+                let val = rangeSelector.val();
+                console.log('changed', values[val]);
+
+                monthSelector.html(values[rangeSelector.val()]);
+            }
+
+            updateValueSelector();
+
+
+            rangeSelector.on('change', function(){
+                updateValueSelector();
+            })
+
         });
     </script>
 @endpush
