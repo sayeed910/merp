@@ -1,10 +1,11 @@
 @extends('adminlte::page')
-@section('title', "suppliers")
+@section('title', "Suppliers")
 @section('content_header')
     <h1>Supplier List</h1>
 @endsection
 
 @section('content')
+    {{--Modal Dialog for adding new supplier--}}
     <div id="addSupplierModal" class="modal fade">
         <div class="modal-dialog">
 
@@ -16,20 +17,22 @@
                 </div>
                 <form action="{{url('/admin/suppliers')}}" method="post">
                     {{csrf_field()}}
-                <div class="modal-body">
-                    <input type="text" name="name" id="supplierNameInput" placeholder="Enter Supplier Name" class="form-control"/>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+                    <div class="modal-body">
+                        <input type="text" name="name" id="supplierNameInput" placeholder="Enter Supplier Name"
+                               class="form-control"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
                 </form>
             </div>
 
         </div>
     </div>
 
-    {{--Modal Dialog for editing Supplier--}}
+    {{--Modal dialog for editing existing supplier--}}
+
     <div id="editSupplierModal" class="modal fade">
         <div class="modal-dialog">
 
@@ -40,13 +43,13 @@
                     <h4 class="modal-title">Edit Supplier</h4>
                 </div>
 
-                <!--The appropriate url is filled by javascript when edit button is pressed on a row. The format of url is '/admin/customers/edit/{id}'-->
-                <form action="" method="post" id="SupplierEditForm">
+                <!--The appropriate url is filled by javascript when edit button is pressed on a row. The format of url is '/admin/suppliers/edit/{id}'-->
+                <form action="" method="post" id="supplierEditForm">
                     {{csrf_field()}}
                     <div class="modal-body">
-                        {{--The value of the text box is the customer name on the row the button was pressed. Filled by JS.--}}
-                        <label for="SupplierEditInput">Supplier Name</label>
-                        <input type="text" name="name" id="SupplierEditInput" placeholder="Enter Customer Name"
+                        {{--The value of the text box is the supplier name on the row the button was pressed. Filled by JS.--}}
+                        <label for="supplierEditInput">Supplier Name</label>
+                        <input type="text" name="name" id="supplierEditInput" placeholder="Enter Supplier Name"
                                class="form-control" value=""/>
                     </div>
                     <div class="modal-footer">
@@ -60,23 +63,29 @@
     </div>
     <div class="box box-primary">
         <div class="box-body">
-            <button class="btn btn-primary margin-bottom" data-toggle="modal" data-target="#addSupplierModal">Add Supplier</button>
-            <table id="SupplierList" class="table table-responsive">
+            <a class="btn btn-primary margin-bottom" href="{{url("/admin/suppliers/create")}}" >Add
+                Supplier
+            </a>
+            <table id="supplierList" class="table table-responsive">
                 <thead>
                 <tr>
                     <th>SN</th>
                     <th>Name</th>
-                    <th>Due</th>
+                    <th>Email</th>
+                    <th>Contact No.</th>
+                    <th>Address</th>
                     <th></th>
                 </tr>
 
                 </thead>
                 <tbody>
-                @foreach($suppliers as $Supplier)
-                    <tr id="{{$Supplier->id}}">
+                @foreach($suppliers as $supplier)
+                    <tr id="{{$supplier->id}}">
                         <td></td>
-                        <td>{{$Supplier->name}}</td>
-                        <td>{{$Supplier->due()}}</td>
+                        <td>{{$supplier->name}}</td>
+                        <td>{{$supplier->email}}</td>
+                        <td>{{$supplier->contact_no}}</td>
+                        <td>{{$supplier->address}}</td>
                         <td>
                             <button title="Edit" data-toggle="modal" data-target="#editSupplierModal"
                                     class="btn btn-primary edit"><i class="fa fa-edit"></i></button>
@@ -94,7 +103,8 @@
 @push('js')
     <script>
         $(document).ready(() => {
-            let table = $('#supplierList').DataTable({
+            const supplierTable = $('#supplierList');
+            let table = supplierTable.DataTable({
                 "columnDefs": [{
                     "searchable": false,
                     "orderable": false,
@@ -109,7 +119,7 @@
                 });
             }).draw();
 
-            table.on('click', '.delete', function () {
+            supplierTable.on('click', '.delete', function () {
                 const id = $(this).parents('tr').attr('id');
                 $.ajax({
                     method: "post",
@@ -120,11 +130,11 @@
                     }
                 }).done((status) => {
                     if (status === 'success') {
-                        $.notify('Supplier Deleted', {position: 'top center', className: 'success'});
+                        $.notify('EloquentSupplier Deleted', {position: 'top center', className: 'success'});
                         table.rows(document.getElementById(id)).remove().draw();
                     }
                     else {
-                        $.notify('Supplier Not Deleted: ' + status, {
+                        $.notify('EloquentSupplier Not Deleted: ' + status, {
                             position: 'top center',
                             className: 'error'
                         });
@@ -138,12 +148,9 @@
                 const row = $(e.relatedTarget).parents('tr');
                 const id = row.attr('id');
                 const name = row.children('td:eq(1)').text();
-                $('#SupplierEditForm').attr('action', "{{url('/admin/suppliers/edit')}}" + "/" + id);
-                $('#SupplierEditInput').val(name);
+                $('#supplierEditForm').attr('action', "{{url('/admin/suppliers/edit')}}" + "/" + id);
+                $('#supplierEditInput').val(name);
             })
-
-
-
         });
     </script>
 @endpush

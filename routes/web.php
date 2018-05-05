@@ -19,11 +19,14 @@ Auth::routes();
 
 Route::get('/admin', 'HomeController@index');
 
+Route::get("/admin/products", "ProductController@index");
 Route::post("/admin/products/{product}", "ProductController@json");
 Route::post("/admin/products", "ProductController@store");
-Route::get("/admin/products", "ProductController@index");
+Route::get("/admin/products/top10", "ProductController@top10");
 Route::get("/admin/products/create", "ProductController@create");
 Route::get("/admin/products/{itemCode}/edit", "ProductController@edit");
+Route::get("/admin/products/{itemCode}/view", "ProductController@show");
+Route::get("/admin/products/{itemCode}/sale", "ProductController@sale");
 Route::patch("/admin/products/{itemCode}", "ProductController@update");
 Route::delete("/admin/products/{itemCode}", "ProductController@destroy");
 
@@ -48,13 +51,16 @@ Route::post("/admin/categories", "CategoryController@store");
 Route::delete("/admin/categories/{id}", "CategoryController@destroy");
 Route::patch("/admin/categories/{id}", "CategoryController@update");
 
+//Customer Routes
 Route::get("/admin/customers", "CustomerController@index");
+Route::get("/admin/customers/create", "CustomerController@create");
 Route::post("/admin/customers", "CustomerController@store");
 Route::delete("/admin/customers/{id}", "CustomerController@destroy");
 Route::patch("/admin/customers/{id}", "CustomerController@update");
 
 //Supplier routes
 Route::get("/admin/suppliers", "SupplierController@index");
+Route::get("/admin/suppliers/create", "SupplierController@create");
 Route::post("/admin/suppliers", "SupplierController@store");
 Route::delete("/admin/suppliers/{id}", "SupplierController@destroy");
 Route::patch("/admin/suppliers/{id}", "SupplierController@update");

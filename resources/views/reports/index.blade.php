@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="box box-primary " style="height: 480px; overflow-y: auto">
+    <div class="box box-primary " style="height: 600px; overflow-y: auto" id="content">
         <div class="box-body">
             <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-lg-4">
                             <span id="purchaseCount"></span><br>
-                            <canvas id="myChart" width="400" height="400"></canvas>
+                            <canvas id="myChart" width="600" height="400"></canvas>
                         </div>
                     </div>
                     <div id="sale" class="tab-pane fade">
@@ -85,7 +85,7 @@
 
 @push('js')
     <script src="{{asset("/js/jquery_ui.js")}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+    <script src="{{asset("/js/chart.js")}}"></script>
     <script>
         Date.prototype.addDays = function(days) {
             var date = new Date(this.valueOf());
@@ -193,6 +193,8 @@
                 fromDate = $.datepicker.formatDate('yy-mm-dd', new Date(fromDate));
                 toDate = $.datepicker.formatDate('yy-mm-dd', new Date(toDate));
 
+                $('#content').height(window.innerHeight - 150);
+
                 $.ajax({
                     method: "POST",
                     url: "{{url("/admin/reports/purchase")}}",
@@ -238,10 +240,79 @@
                         for (i in purchasedate){
                             console.log(purchasedate[i], purchasecount[i]);
                         }
+                        $.ajax({
+                            method: "POST",
+                            url: "{{url("/admin/reports/sale")}}",
+                            data: {
+                                date1: fromDate,
+                                date2: toDate
+                            },
+                            success: function (response) {
+                                sales = response;
+                                saledate = [];
+                                salecount = [];
+
+                                let range = getDates(new Date(fromDate), new Date(toDate));
+                                // console.log(range);
+
+                                for (date of range){
+                                    saledate.push($.datepicker.formatDate("yy-mm-dd", new Date(date)));
+                                    salecount.push(0);
+                                }
+
+                                let cost = 0;
+                                response.forEach(function (order) {
+                                    let neworder = {
+                                        invoice: order['id'],
+                                        customer: order['customer']['name'],
+                                        amount: order['amount'],
+                                        date: order['created_at'],
+                                        SN: 0,
+                                        DT_RowId: order['id']
+                                    };
+                                    const formattedDate = $.datepicker.formatDate("yy-mm-dd", new Date(order['created_at']));
+                                    const index = $.inArray(formattedDate, saledate);
+                                    salecount[index]++;
+                                    cost += parseFloat(order['amount']);
+                                    saleTable.row.add(neworder).draw();
+
+                                    $('#saleCount').text("Total Sale: " + sales.length + "\nTotal Income: " + cost);
+                                });
+
+                                for (i in saledate){
+                                    console.log(saledate[i], salecount[i]);
+                                }
 
 
-                        var ctx = document.getElementById("myChart");
-                        var myChart = new Chart(ctx, {
+                                var ctx = document.getElementById("saleChart");
+                                var myChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: saledate,
+                                        datasets: [{
+                                            label: '# of Sales',
+                                            data: salecount,
+                                            backgroundColor: 'rgba(255,99,132,1)',
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true
+                                                }
+                                            }]
+                                        }
+                                    }
+                                });
+                            }
+                        });
+
+
+
+                        const ctx = document.getElementById("myChart");
+                        const myChart = new Chart(ctx, {
                             type: 'bar',
                             data: {
                                 labels: purchasedate,
@@ -265,74 +336,7 @@
                     }
                 });
 
-                $.ajax({
-                    method: "POST",
-                    url: "{{url("/admin/reports/sale")}}",
-                    data: {
-                        date1: fromDate,
-                        date2: toDate
-                    },
-                    success: function (response) {
-                        sales = response;
-                        saledate = [];
-                        salecount = [];
 
-                        let range = getDates(new Date(fromDate), new Date(toDate));
-                        // console.log(range);
-
-                        for (date of range){
-                            saledate.push($.datepicker.formatDate("yy-mm-dd", new Date(date)));
-                            salecount.push(0);
-                        }
-
-                        let cost = 0;
-                        response.forEach(function (order) {
-                            let neworder = {
-                                invoice: order['id'],
-                                customer: order['customer']['name'],
-                                amount: order['amount'],
-                                date: order['created_at'],
-                                SN: 0,
-                                DT_RowId: order['id']
-                            };
-                            const formattedDate = $.datepicker.formatDate("yy-mm-dd", new Date(order['created_at']));
-                            const index = $.inArray(formattedDate, saledate);
-                            salecount[index]++;
-                            cost += parseFloat(order['amount']);
-                            saleTable.row.add(neworder).draw();
-
-                            $('#saleCount').text("Total Sale: " + sales.length + "\nTotal Income: " + cost);
-                        });
-
-                        for (i in saledate){
-                            console.log(saledate[i], salecount[i]);
-                        }
-
-
-                        var ctx = document.getElementById("saleChart");
-                        var myChart = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: saledate,
-                                datasets: [{
-                                    label: '# of Sales',
-                                    data: salecount,
-                                    backgroundColor: 'rgba(255,99,132,1)',
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    yAxes: [{
-                                        ticks: {
-                                            beginAtZero: true
-                                        }
-                                    }]
-                                }
-                            }
-                        });
-                    }
-                })
             })
 
         });

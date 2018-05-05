@@ -16,7 +16,7 @@ class SupplierController extends Controller
     public function index()
     {
         $suppliers = Supplier::all();
-        return view('supplier.index', compact('suppliers'));
+        return view('suppliers.index', compact('suppliers'));
     }
 
     /**
@@ -26,7 +26,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('suppliers.create');
     }
 
     /**
@@ -39,6 +39,9 @@ class SupplierController extends Controller
     {
         $supplier = new Supplier();
         $supplier->name = $request->input('name');
+        $supplier->email = $request->input('email');
+        $supplier->contact_no = $request->input('contact_no');
+        $supplier->address = $request->input('address');
         $supplier->save();
 
         return redirect(url('/admin/suppliers'));

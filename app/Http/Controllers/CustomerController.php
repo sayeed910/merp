@@ -27,7 +27,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('customers.create');
     }
 
     /**
@@ -40,6 +40,9 @@ class CustomerController extends Controller
     {
         $customer = new Customer();
         $customer->name = $request->input('name');
+        $customer->email = $request->input('email');
+        $customer->contact_no = $request->input('contact_no');
+        $customer->address = $request->input('address');
         $customer->save();
 
         return redirect(url('/admin/customers'));
@@ -78,9 +81,12 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $customer->name = $request->input('name');
+        $customer->email = $request->input('email');
+        $customer->contact_no = $request->input('contact_no');
+        $customer->address = $request->input('address');
         $customer->update();
 
-        return redirect('/admin/customers');
+        return redirect(url('/admin/customers'));
     }
 
     /**

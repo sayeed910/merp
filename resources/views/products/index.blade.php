@@ -11,7 +11,8 @@
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#listing">Listing</a></li>
-                    <li><a data-toggle="tab" href="#trending">Trending</a></li>
+                    <li><a id="trendingLink" data-toggle="tab" href="#trending">Trending</a></li>
+                    <li><a id="contributionLink" data-toggle="tab" href="#contribution">Contribution</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -52,7 +53,8 @@
                                     <td>{{$product->stock}}</td>
                                     <td>{{$product->damaged}}</td>
                                     <td>
-                                        <button title="Edit" class="btn btn-primary edit"><i class="fa fa-edit"></i></button>
+                                        <button title="Edit" class="btn btn-primary edit"><i class="fa fa-edit"></i>
+                                        </button>
                                         <button title="Delete" class="btn btn-google delete"><i class="fa fa-trash"></i>
                                         </button>
                                     </td>
@@ -68,8 +70,27 @@
                             <option value="0">Monthly</option>
                             <option value="1">Yearly</option>
                         </select>
-                        <select name="years" id="years"></select>
-                        <select name="months" id="months"></select>
+                        <select name="years" class="year"></select>
+                        <select name="months" class="month"></select>
+                        <button id="generateButton" class="btn btn-bitbucket">Generate</button>
+
+                        <div>
+                            <canvas id="top10graph"></canvas>
+                        </div>
+                    </div>
+                    <div id="Contribution" class="tab-pane fade">
+                        <label for="type">Type</label>
+                        <select name="type" id="type">
+                            <option value="0">Monthly</option>
+                            <option value="1">Yearly</option>
+                        </select>
+                        <select name="years" id="cyears"></select>
+                        <select name="months" id="cmonths"></select>
+                        <button id="cgenerateButton" class="btn btn-bitbucket">Generate</button>
+
+                        <div>
+                            <canvas id="contributionGraph"></canvas>
+                        </div>
                     </div>
 
                 </div>
@@ -79,11 +100,22 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{asset("/js/chart.js")}}"></script>
+    <script src="{{asset("js/products/index.js")}}"></script>
     <script>
         $(document).ready(() => {
             const rangeSelector = $('#type');
             const yearSelector = $('#years');
             const monthSelector = $('#months');
+            const trendingLink = $('#trendingLink');
+            const generateButton = $('#generateButton');
+
+            const crangeSelector = $('#ctype');
+            const cyearSelector = $('#cyears');
+            const cmonthSelector = $('#cmonths');
+            const cgenerateButton = $('#cgenerateButton');
+            const contributionGraph = $('#contributionGraph');
+
             const table = $('#productList').DataTable({
                 "columnDefs": [{
                     "searchable": false,
@@ -102,6 +134,11 @@
             table.on('click', '.edit', function () {
                 const id = $(this).parents('tr').attr('id');
                 window.location.href = "{{url('/admin/products/')}}" + '/' + id + '/edit';
+            });
+
+            table.on('click', 'tr', function(){
+                const id = $(this).attr('id');
+               window.location.href = "{{url("/admin/products/")}}" + `/${id}/view`;
             });
 
             table.on('click', '.delete', function () {
@@ -135,41 +172,37 @@
                 console.log(requestData.url);
             });
 
-            const values = [];
-            const months = ['January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'];
-
-            let monthValueString = "";
-            for (let i = 0; i < 11; i++){
-                let selected = "";
-                if (i === new Date().getMonth()){
-                    selected = "selected";
+            //Charting
+            const chartOptions = {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
                 }
-                monthValueString += `<option value="${i}" ${selected}>${months[i]}</option>`
+            };
+            function getLabelsAndDatas(response){
+                let labelsAndDatas = {
+                    labels : [],
+                    datas : [],
+                };
+
+                const products = response['products'];
+                if (! products) return null;
+                products.forEach(function(product){
+                    labelsAndDatas.labels.push(product['name']);
+                    labelsAndDatas.datas.push(product['sale_count']);
+                });
+
+                return labelsAndDatas;
+
             }
-            values.push(monthValueString);
-
-
-            let yearValueString = "";
-            for (let i = 1995; i < new Date().getFullYear(); i++){
-                yearValueString += `<option value="${i}">${i}</option>`
-            }
-
-            values.push(yearValueString);
-
-            function updateValueSelector() {
-                let val = rangeSelector.val();
-                console.log('changed', values[val]);
-
-                monthSelector.html(values[rangeSelector.val()]);
-            }
-
-            updateValueSelector();
-
-
-            rangeSelector.on('change', function(){
-                updateValueSelector();
-            })
+            const top10graph = new GraphMaker("trending", "{{url("/admin/products/top10")}}", "horizontalBar", chartOptions);
+            top10graph.makeGraph(getLabelsAndDatas, "Top 10 Products");
+            generateButton.on('click', function(){
+               top10graph.makeGraph(getLabelsAndDatas, "Top 10 products");
+            });
 
         });
     </script>

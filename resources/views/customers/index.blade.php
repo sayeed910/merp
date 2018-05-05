@@ -63,16 +63,17 @@
     </div>
     <div class="box box-primary">
         <div class="box-body">
-            <button class="btn btn-primary margin-bottom" data-toggle="modal" data-target="#addCustomerModal">Add
+            <a class="btn btn-primary margin-bottom" href="{{url("/admin/customers/create")}}">Add
                 Customer
-            </button>
+            </a>
             <table id="customerList" class="table table-responsive">
                 <thead>
                 <tr>
                     <th>SN</th>
                     <th>Name</th>
-                    <th>No. of Transactions</th>
-                    <th>Due</th>
+                    <th>Email</th>
+                    <th>Contact No.</th>
+                    <th>Address</th>
                     <th></th>
                 </tr>
 
@@ -82,8 +83,9 @@
                     <tr id="{{$customer->id}}">
                         <td></td>
                         <td>{{$customer->name}}</td>
-                        <td>{{$customer->saleOrders->count()}}</td>
-                        <td>{{$customer->due()}}</td>
+                        <td>{{$customer->email}}</td>
+                        <td>{{$customer->contact_no}}</td>
+                        <td>{{$customer->address}}</td>
                         <td>
                             <button title="Edit" data-toggle="modal" data-target="#editCustomerModal"
                                     class="btn btn-primary edit"><i class="fa fa-edit"></i></button>
@@ -128,11 +130,11 @@
                     }
                 }).done((status) => {
                     if (status === 'success') {
-                        $.notify('EloquentCustomer Deleted', {position: 'top center', className: 'success'});
+                        $.notify('Customer Deleted', {position: 'top center', className: 'success'});
                         table.rows(document.getElementById(id)).remove().draw();
                     }
                     else {
-                        $.notify('EloquentCustomer Not Deleted: ' + status, {
+                        $.notify('Customer Not Deleted: ' + status, {
                             position: 'top center',
                             className: 'error'
                         });

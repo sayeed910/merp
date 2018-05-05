@@ -112,7 +112,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::find($id);
+        return view('products.show', compact('product'));
     }
 
     /**
@@ -127,6 +128,12 @@ class ProductController extends Controller
         $categories = $this->categoryRepository->getAll();
         $product = Product::find($itemCode);
         return view('products.edit', compact('product', 'brands', 'categories'));
+    }
+
+    public function sale(Request $request, $itemCode){
+        $year = $request->input('year');
+        $product = Product::find($itemCode);
+        return $product->saleInYear($year);
     }
 
     /**
@@ -190,6 +197,24 @@ class ProductController extends Controller
     {
         $product->brandName = $product->brand->name;
         return $product;
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function top10(Request $request)
+    {
+        $date1 = $request->input('date1');
+        $date2 = $request->input('date2');
+
+        $top10 = Product::top10($date1, $date2);
+
+        if (!count($top10)) {
+            return response()->json(["count" => 0]);
+        }
+
+        return response()->json(['count' => count($top10), 'products'=> $top10]);
     }
 
     private function validateRequest($request)

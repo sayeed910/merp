@@ -126,5 +126,21 @@ class ProductControllerTest extends TestCase
 
     }
 
+    /**
+    * @test
+    *
+    */
+    public function it_should_show_top_10(){
+        $this->authenticate();
+        factory(\App\Data\Models\Product::class, 100)->create();
+        factory(\App\Data\Models\SaleOrder::class, 30)->create();
+        factory(\App\Data\Models\SaleOrderItem::class, 100)->create();
+
+//        $this->get("/admin/products/top10", ['date1' => "2018-05-01", "date2" => "2018-05-10"]);
+        $this->call("GET", "/admin/products/top10", ['date1' => "2018-05-01", "date2" => "2018-05-10"]);
+        fwrite(STDOUT, $this->response->content());
+    }
+
+
 
 }

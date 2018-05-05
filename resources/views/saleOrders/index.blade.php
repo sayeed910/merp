@@ -15,11 +15,12 @@
                 <tr>
                     <th>SN</th>
                     <th>Invoice</th>
+                    <th>Ref</th>
                     <th>User</th>
                     <th>Customer</th>
                     <th>No. of Items</th>
                     <th>Amount</th>
-                    <th>Due</th>
+                    {{--<th>Due</th>--}}
                     <th>Date</th>
                 </tr>
 
@@ -29,11 +30,12 @@
                     <tr>
                         <td></td>
                         <td>{{$order->id}}</td>
+                        <td>{{$order->ref}}</td>
                         <td>{{$order->user->name}}</td>
                         <td>{{$order->customer->name}}</td>
                         <td>{{$order->saleOrderItems->count()}}</td>
                         <td>{{$order->amount()}}</td>
-                        <td>{{$order->due}}</td>
+                        {{--<td>{{$order->due}}</td>--}}
                         <td>{{$order->created_at}}</td>
                     </tr>
                 @endforeach
