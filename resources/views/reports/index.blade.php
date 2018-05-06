@@ -87,7 +87,7 @@
     <script src="{{asset("/js/jquery_ui.js")}}"></script>
     <script src="{{asset("/js/chart.js")}}"></script>
     <script>
-        Date.prototype.addDays = function(days) {
+        Date.prototype.addDays = function (days) {
             var date = new Date(this.valueOf());
             date.setDate(date.getDate() + days);
             return date;
@@ -97,7 +97,7 @@
             var dateArray = [];
             var currentDate = startDate;
             while (currentDate <= stopDate) {
-                dateArray.push(new Date (currentDate));
+                dateArray.push(new Date(currentDate));
                 currentDate = currentDate.addDays(1);
             }
             return dateArray;
@@ -210,7 +210,7 @@
                         let range = getDates(new Date(fromDate), new Date(toDate));
                         // console.log(range);
 
-                        for (date of range){
+                        for (date of range) {
                             purchasedate.push($.datepicker.formatDate("yy-mm-dd", new Date(date)));
                             purchasecount.push(0);
                         }
@@ -237,7 +237,7 @@
 
                         });
 
-                        for (i in purchasedate){
+                        for (i in purchasedate) {
                             console.log(purchasedate[i], purchasecount[i]);
                         }
                         $.ajax({
@@ -255,7 +255,7 @@
                                 let range = getDates(new Date(fromDate), new Date(toDate));
                                 // console.log(range);
 
-                                for (date of range){
+                                for (date of range) {
                                     saledate.push($.datepicker.formatDate("yy-mm-dd", new Date(date)));
                                     salecount.push(0);
                                 }
@@ -279,7 +279,7 @@
                                     $('#saleCount').text("Total Sale: " + sales.length + "\nTotal Income: " + cost);
                                 });
 
-                                for (i in saledate){
+                                for (i in saledate) {
                                     console.log(saledate[i], salecount[i]);
                                 }
 
@@ -300,7 +300,9 @@
                                         scales: {
                                             yAxes: [{
                                                 ticks: {
-                                                    beginAtZero: true
+                                                    beginAtZero: true,
+                                                    min: 0,
+                                                    stepSize: 1
                                                 }
                                             }]
                                         }
@@ -308,7 +310,6 @@
                                 });
                             }
                         });
-
 
 
                         const ctx = document.getElementById("myChart");
@@ -327,7 +328,9 @@
                                 scales: {
                                     yAxes: [{
                                         ticks: {
-                                            beginAtZero: true
+                                            beginAtZero: true,
+                                            min: 0,
+                                            stepSize: 1
                                         }
                                     }]
                                 }

@@ -110,7 +110,17 @@
                                     fill: false
                                 }]
                             },
-                            // options: this.chartOptions
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            min: 0,
+                                            stepSize: 1
+                                        }
+                                    }]
+                                }
+                            }
                         });
 
 

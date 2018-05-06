@@ -101,6 +101,9 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{asset("js/notify.js")}}"></script>
+@endpush
+@push('js')
     <script>
         $(document).ready(() => {
             const supplierTable = $('#supplierList');
@@ -122,19 +125,18 @@
             supplierTable.on('click', '.delete', function () {
                 const id = $(this).parents('tr').attr('id');
                 $.ajax({
-                    method: "post",
-                    url: "{{url('admin/suppliers/delete')}}",
+                    method: "delete",
+                    url: "{{url('admin/suppliers/')}}" + `/${id}`,
                     data: {
-                        "id": id,
                         "_token": "{{csrf_token()}}"
                     }
                 }).done((status) => {
                     if (status === 'success') {
-                        $.notify('EloquentSupplier Deleted', {position: 'top center', className: 'success'});
+                        $.notify('Supplier Deleted', {position: 'top center', className: 'success'});
                         table.rows(document.getElementById(id)).remove().draw();
                     }
                     else {
-                        $.notify('EloquentSupplier Not Deleted: ' + status, {
+                        $.notify('Supplier Not Deleted: ' + status, {
                             position: 'top center',
                             className: 'error'
                         });
@@ -142,6 +144,18 @@
                     }
 
                 })
+            });
+
+            table.on('click', '.edit', function(){
+                console.log("edit clicked");
+                const id = $(this).parents('tr').attr('id');
+                window.location.href = "{{url('/admin/suppliers/')}}" + '/' + id + '/edit';
+                return false;
+            });
+
+            table.on('click', 'tr', function () {
+                const id = $(this).attr('id');
+                window.location.href = "{{url("/admin/suppliers/")}}" + `/${id}/view`;
             });
 
             $('#editSupplierModal').on('show.bs.modal', function (e) {

@@ -67,6 +67,9 @@ Route::get("/admin/suppliers/create", "SupplierController@create");
 Route::post("/admin/suppliers", "SupplierController@store");
 Route::delete("/admin/suppliers/{id}", "SupplierController@destroy");
 Route::patch("/admin/suppliers/{id}", "SupplierController@update");
+Route::get("/admin/suppliers/{id}/view", "SupplierController@show");
+Route::get("/admin/suppliers/{id}/edit", "SupplierController@edit");
+Route::get("/admin/suppliers/{id}/sale", "SupplierController@purchase");
 
 //reports
 Route::get('/admin/reports', "ReportController@index");

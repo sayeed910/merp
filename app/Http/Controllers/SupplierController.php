@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Models\PurchaseOrder;
 use App\Data\Models\Supplier;
 use Illuminate\Http\Request;
 
@@ -55,7 +56,17 @@ class SupplierController extends Controller
      */
     public function show($id)
     {
-        //
+        $customer = Supplier::find($id);
+        $orders = PurchaseOrder::where('supplier_id', $id)->get();
+        return view('suppliers.show', compact('customer', 'orders'));
+    }
+
+    public function purchase(Request $request, $id)
+    {
+        $year = $request->input('year');
+        $customer = Supplier::find($id);
+        return $customer->purchaseInYear($year);
+
     }
 
     /**
@@ -66,7 +77,8 @@ class SupplierController extends Controller
      */
     public function edit($id)
     {
-        //
+        $customer = Supplier::find($id);
+        return view('suppliers.edit', compact('customer'));
     }
 
     /**
@@ -80,6 +92,9 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::find($id);
         $supplier->name = $request->input('name');
+        $supplier->email = $request->input('email');
+        $supplier->contact_no = $request->input('contact_no');
+        $supplier->address = $request->input('address');
         $supplier->update();
 
         return redirect('/admin/suppliers');
