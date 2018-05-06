@@ -99,6 +99,9 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{asset("js/notify.js")}}"></script>
+@endpush
+@push('js')
     <script src="{{asset("/js/chart.js")}}"></script>
     <script src="{{asset("js/products/index.js")}}"></script>
     <script>

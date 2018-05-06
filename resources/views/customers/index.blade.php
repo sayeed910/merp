@@ -45,12 +45,26 @@
 
                 <!--The appropriate url is filled by javascript when edit button is pressed on a row. The format of url is '/admin/customers/edit/{id}'-->
                 <form action="" method="post" id="customerEditForm">
+                    <input type="hidden" name="_method" value="PATCH">
                     {{csrf_field()}}
                     <div class="modal-body">
                         {{--The value of the text box is the customer name on the row the button was pressed. Filled by JS.--}}
-                        <label for="customerEditInput">Customer Name</label>
+                        <label for="customerEditInput">Name</label>
                         <input type="text" name="name" id="customerEditInput" placeholder="Enter Customer Name"
                                class="form-control" value=""/>
+
+                        <label for="customerEmailInput">Email </label>
+                        <input type="email" name="name" id="customerEmailInput" placeholder="Enter Customer Email"
+                               class="form-control" value=""/>
+
+                        <label for="customerPhoneInput">Contact No</label>
+                        <input type="text" name="name" id="customerPhoneInput" placeholder="Enter Customer Contact No."
+                               class="form-control" value=""/>
+
+                        <label for="customerAreaInput">Address</label>
+                        <textarea name="address" id="customerAreaInput" cols="30" rows="3"
+                                  class="form-control"></textarea>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -101,6 +115,9 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{asset("js/notify.js")}}"></script>
+@endpush
+@push('js')
     <script>
         $(document).ready(() => {
             const customerTable = $('#customerList');
@@ -119,19 +136,25 @@
                 });
             }).draw();
 
-            table.on('click', 'tr', function(){
+            table.on('click', 'tr', function () {
                 const id = $(this).attr('id');
                 window.location.href = "{{url("/admin/customers/")}}" + `/${id}/view`;
+            });
+
+            table.on('click', '.edit', function(){
+                console.log("edit clicked");
+                const id = $(this).parents('tr').attr('id');
+                window.location.href = "{{url('/admin/customers/')}}" + '/' + id + '/edit';
+                return false;
             });
 
 
             table.on('click', '.delete', function () {
                 const id = $(this).parents('tr').attr('id');
                 $.ajax({
-                    method: "post",
-                    url: "{{url('admin/customers/delete')}}",
+                    method: "delete",
+                    url: "{{url('admin/customers/')}}" + `/${id}`,
                     data: {
-                        "id": id,
                         "_token": "{{csrf_token()}}"
                     }
                 }).done((status) => {
@@ -147,7 +170,9 @@
 
                     }
 
-                })
+                });
+
+                return false;
             });
 
             $('#editCustomerModal').on('show.bs.modal', function (e) {
@@ -156,6 +181,7 @@
                 const name = row.children('td:eq(1)').text();
                 $('#customerEditForm').attr('action', "{{url('/admin/customers/edit')}}" + "/" + id);
                 $('#customerEditInput').val(name);
+                return false;
             })
         });
     </script>
