@@ -12,7 +12,6 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#listing">Listing</a></li>
                     <li><a id="trendingLink" data-toggle="tab" href="#trending">Trending</a></li>
-                    <li><a id="contributionLink" data-toggle="tab" href="#contribution">Contribution</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -132,8 +131,10 @@
             }).draw();
 
             table.on('click', '.edit', function () {
+                console.log("edit clicked");
                 const id = $(this).parents('tr').attr('id');
                 window.location.href = "{{url('/admin/products/')}}" + '/' + id + '/edit';
+                return false;
             });
 
             table.on('click', 'tr', function(){
@@ -142,6 +143,7 @@
             });
 
             table.on('click', '.delete', function () {
+
                 const id = $(this).parents('tr').attr('id');
                 const onDone = (status) => {
                     console.log(status);
@@ -156,6 +158,7 @@
                         });
 
                     }
+                    return false;
                 };
 
                 const deleteUrl = "{{url('admin/products/')}}" + "/" + id;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Data\Models\Customer;
+use App\Data\Models\SaleOrder;
 use Illuminate\Http\Request;
 
 //Todo: change the update & delete method to make Customer from the repository instead of factory
@@ -56,7 +57,17 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
-        //
+        $customer = Customer::find($id);
+        $orders = SaleOrder::where('customer_id', $id)->get();
+        return view('customers.show', compact('customer', 'orders'));
+    }
+
+    public function purchase(Request $request, $id)
+    {
+        $year = $request->input('year');
+        $customer = Customer::find($id);
+        return $customer->purchaseInYear($year);
+
     }
 
     /**

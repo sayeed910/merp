@@ -113,7 +113,8 @@ class BrandController extends Controller
 
 
             if ($this->brandRepository->update($brand))
-                return response()->json(['success' => true]);
+                return redirect("/admin/brands");
+//                return response()->json(['success' => true]);
             else
                 return response()->json(['success' => false, 'message' => 'The brand does not exist.']);
         } catch (ValidationException $ex){

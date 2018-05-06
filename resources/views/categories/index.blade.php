@@ -93,6 +93,9 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{asset("js/notify.js")}}"></script>
+@endpush
+@push('js')
     <script>
         $(document).ready(() => {
             let table = $('#categoryList').DataTable({

@@ -19,10 +19,12 @@ use App\Data\Models\User;
 $factory->define(App\Data\Models\SaleOrderItem::class, function (Faker\Generator $faker) {
 
     $product = \App\Data\Models\Product::inRandomOrder()->first();
+    $order = \App\Data\Models\SaleOrder::inRandomOrder()->first();
     return [
         'product_item_code' => $product->item_code,
-        'sale_order_id' => \App\Data\Models\SaleOrder::inRandomOrder()->first()->id,
+        'sale_order_id' => $order->id,
         'qty' => rand(0, 30),
-        'price' => $product->price
+        'price' => $product->price,
+        'created_at' => $order->created_at
    ];
 });

@@ -119,7 +119,13 @@
                 });
             }).draw();
 
-            customerTable.on('click', '.delete', function () {
+            table.on('click', 'tr', function(){
+                const id = $(this).attr('id');
+                window.location.href = "{{url("/admin/customers/")}}" + `/${id}/view`;
+            });
+
+
+            table.on('click', '.delete', function () {
                 const id = $(this).parents('tr').attr('id');
                 $.ajax({
                     method: "post",

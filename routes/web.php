@@ -57,6 +57,8 @@ Route::get("/admin/customers/create", "CustomerController@create");
 Route::post("/admin/customers", "CustomerController@store");
 Route::delete("/admin/customers/{id}", "CustomerController@destroy");
 Route::patch("/admin/customers/{id}", "CustomerController@update");
+Route::get("/admin/customers/{id}/view", "CustomerController@show");
+Route::get("/admin/customers/{id}/sale", "CustomerController@purchase");
 
 //Supplier routes
 Route::get("/admin/suppliers", "SupplierController@index");

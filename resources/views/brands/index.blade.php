@@ -42,11 +42,12 @@
 
                 <!--The appropriate url is filled by javascript when edit button is pressed on a row. The format of url is '/admin/customers/edit/{id}'-->
                 <form action="" method="post" id="brandEditForm">
+                    <input type="hidden" name="_method" value="PATCH">
                     {{csrf_field()}}
                     <div class="modal-body">
                         {{--The value of the text box is the customer name on the row the button was pressed. Filled by JS.--}}
                         <label for="brandEditInput">Brand Name</label>
-                        <input type="text" name="name" id="brandEditInput" placeholder="Enter Customer Name"
+                        <input type="text" name="name" id="brandEditInput" placeholder="Enter Brand Name"
                                class="form-control" value=""/>
                     </div>
                     <div class="modal-footer">
@@ -92,6 +93,9 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{asset("js/notify.js")}}"></script>
+    @endpush
+@push('js')
     <script>
         $(document).ready(() => {
             let table = $('#brandList').DataTable({
@@ -112,19 +116,18 @@
             table.on('click', '.delete', function () {
                 const id = $(this).parents('tr').attr('id');
                 $.ajax({
-                    method: "post",
-                    url: "{{url('admin/brands/delete')}}",
+                    method: "delete",
+                    url: "{{url('admin/brands/')}}" + `/${id}`,
                     data: {
-                        "id": id,
                         "_token": "{{csrf_token()}}"
                     }
                 }).done((status) => {
-                    if (status === 'success') {
+                    if (status['success']) {
                         $.notify('Brand Deleted', {position: 'top center', className: 'success'});
                         table.rows(document.getElementById(id)).remove().draw();
                     }
                     else {
-                        $.notify('Brand Not Deleted: ' + status, {
+                        $.notify('Brand Not Deleted: ' + status['message'], {
                             position: 'top center',
                             className: 'error'
                         });
@@ -138,7 +141,7 @@
                 const row = $(e.relatedTarget).parents('tr');
                 const id = row.attr('id');
                 const name = row.children('td:eq(1)').text();
-                $('#brandEditForm').attr('action', "{{url('/admin/brands/edit')}}" + "/" + id);
+                $('#brandEditForm').attr('action', "{{url('/admin/brands/')}}" + "/" + id);
                 $('#brandEditInput').val(name);
             })
 

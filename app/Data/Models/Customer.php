@@ -8,6 +8,7 @@
 
 namespace App\Data\Models;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Customer extends Model
 {
@@ -21,5 +22,11 @@ class Customer extends Model
         }
 
         return $due;
+    }
+
+    public function purchaseInYear($year)
+    {
+        $query = "SELECT MONTH(created_at) as month, count(*) as _count from sale_orders WHERE customer_id = ? and YEAR(created_at) = ? group by MONTH(created_at) ";
+        return DB::select(DB::raw($query), [$this->id, $year]);
     }
 }
